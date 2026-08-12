@@ -6,6 +6,13 @@ from extensions import db
 sales_bp = Blueprint('sales', __name__)
 
 
+@sales_bp.route('/')
+@login_required
+def index():
+    # Redirect root /sales to the order creation form
+    return redirect(url_for('sales.create'))
+
+
 @sales_bp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create(): 
@@ -72,6 +79,6 @@ def create():
         
         db.session.commit()
         flash('Sale recorded successfully.', 'success')
-        return redirect(url_for('sales.index'))
+        return redirect(url_for('sales.create'))
         
     return render_template('sales/create.html', products=products, customers=customers)
